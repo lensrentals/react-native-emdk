@@ -145,7 +145,7 @@ public class BarcodeScannerManager extends ReactContextBaseJavaModule implements
 
     /**
      * Helper method for getting the EMDKManager object by registering this class as a listener callback.
-     * This allows this application to have acces to EMDK features.
+     * This allows this application to have access to EMDK features.
      */
     @ReactMethod
     public void init() {
