@@ -190,7 +190,7 @@ public class BarcodeScannerManager extends ReactContextBaseJavaModule implements
 
     /**
      * Helper method for disabling the scanner. May result in data from
-     * the previous or in process scan being lost.
+     * the previous or in-process scan being lost.
      */
     @ReactMethod
     public void disable() {
