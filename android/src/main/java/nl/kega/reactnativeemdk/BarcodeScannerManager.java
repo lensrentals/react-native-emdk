@@ -179,6 +179,18 @@ public class BarcodeScannerManager extends ReactContextBaseJavaModule implements
     }
 
     /**
+     * Helper method for using a software button to trigger the scanner once.
+     *
+     * @param condig Scanner configuration passed from React Native app.
+     */
+    @ReactMethod
+    public void scanOnce(ReadableMap condig) {
+        if (this.scannerthread != null) {
+            this.scannerthread.scanOnce(condig);
+        }
+    }
+
+    /**
      * Helper method for canceling pending asynchronous read() calls.
      */
     @ReactMethod

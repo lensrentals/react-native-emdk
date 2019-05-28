@@ -368,6 +368,29 @@ public class BarcodeScannerThread extends Thread implements EMDKListener, DataLi
     }
 
     /**
+     * Sets TriggerType to SOFT_ONCE and calls Scanner.read().
+     * This method should be used by a software button when the device user
+     * should be able to switch between using the hardware button and the 
+     * software button. 
+     * 
+     * @param condig Scanner configuration passed from React Native app.
+     */
+    public void scanOnce(ReadableMap condig) {
+        try {
+            this.config = condig;
+            if (this.scanner.isReadPending()) {
+                this.scanner.cancelRead();
+            }
+
+            this.scanner.triggerType = TriggerType.SOFT_ONCE;
+            this.scanner.setConfig(configureScanner(scanner));
+            this.scanner.read();
+        } catch (ScannerException e) {
+            Log.e(TAG, "Scan once error: " + e);
+        }
+    }
+
+    /**
      * Helper method that determines the appropriate scanner configuration and sets it.
      *
      * @param scanner Scanner to configure

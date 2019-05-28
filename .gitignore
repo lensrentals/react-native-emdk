@@ -1,3 +1,8 @@
 .DS_Store
 .idea/
 android/build/
+local.properties
+.gradle
+gradlew
+android/gradlew.bat
+android/gradle/
