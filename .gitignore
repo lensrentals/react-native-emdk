@@ -6,3 +6,6 @@ local.properties
 gradlew
 android/gradlew.bat
 android/gradle/
+build/
+*.iml
+android/gradlew
