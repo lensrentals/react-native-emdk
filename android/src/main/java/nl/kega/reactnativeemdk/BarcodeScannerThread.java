@@ -125,13 +125,13 @@ public class BarcodeScannerThread extends Thread implements EMDKListener, DataLi
     }
 
     /**
-     * Called to notify the client when the EMDKManager object has been opened and its ready to use.
+     * Called to notify the client when the EMDKManager object has been opened and is ready to use.
      * Source: http://techdocs.zebra.com/emdk-for-android/5-0/api/core/EMDKManager-EMDKListener/
      *
      * @param emdkManager The EMDKManager class is the key class in Android EMDK. This class provides
      *                    access to different classes for the supported features. Clients should call
      *                    EMDKManager.getEMDKManager(Context, EMDKManager.EMDKListener), to get the
-     *                    EMDKManager object. Each application implements EMDKListener interface.
+     *                    EMDKManager object. Each application implements the EMDKListener interface.
      *                    The EMDKManager object will be returned on successful opening through the
      *                    EMDKListener callback.
      *                    Source: http://techdocs.zebra.com/emdk-for-android/5-0/api/core/EMDKManager/
@@ -144,8 +144,8 @@ public class BarcodeScannerThread extends Thread implements EMDKListener, DataLi
 
     /**
      * Called to notify the client that this EMDKManager object has been abruptly closed.
-     * The clients must call to call EMDKManager.release() to free all the resources used
-     * by EMDKManager even after onClosed(). Notifies user upon a abrupt closing of EMDKManager.
+     * The clients must call EMDKManager.release() to free all the resources used
+     * by EMDKManager even after onClosed(). Notifies user upon an abrupt closing of EMDKManager.
      * Source: http://techdocs.zebra.com/emdk-for-android/5-0/api/core/EMDKManager-EMDKListener/
      */
     @Override
@@ -154,11 +154,11 @@ public class BarcodeScannerThread extends Thread implements EMDKListener, DataLi
 
     /**
      * Logs and dispatches barcode events. These events can be
-     * recieved in the React Native application through a callback.
+     * received in the React Native application through a callback.
      * Ex: In the constructor: 'this.onBarcode = this.onBarcode.bind(this);'
      * Then write a function for 'onBarcode(event)'. The `event` passed into this
      * function is the data that was encoded in the barcode.
-     * This is the callback method upon data availability.
+     * This is the callback method that is called upon data becoming available.
      * Source: http://techdocs.zebra.com/emdk-for-android/5-0/api/barcode/Scanner-DataListener/
      *
      * @param scanDataCollection Scanning result
@@ -180,10 +180,10 @@ public class BarcodeScannerThread extends Thread implements EMDKListener, DataLi
 
     /**
      * Logs and dispatches scanner events. These events can
-     * be recieved in the React Native application through a callback
+     * be received in the React Native application through a callback
      * Ex: In the the constructor: `this.onStatus = this.onStatus.bind(this);`
      * Then write a function for `onStatus(event)` that does something with the event.
-     * This is the callback method upon scan status event occurs.
+     * This is the callback method that is called when a scan status event occurs.
      * Source: http://techdocs.zebra.com/emdk-for-android/5-0/api/barcode/Scanner-StatusListener/
      *
      * @param statusData New StatusData
@@ -322,8 +322,7 @@ public class BarcodeScannerThread extends Thread implements EMDKListener, DataLi
 
     /**
      * Sets TriggerType to HARD and calls Scanner.read().
-     * This method should be used when only using a hardware button to
-     * trigger the scanner.
+     * This method should be used when a hardware button is the only trigger for the scanner.
      *
      * @param condig Scanner configuration passed from React Native app.
      */
@@ -349,8 +348,7 @@ public class BarcodeScannerThread extends Thread implements EMDKListener, DataLi
 
     /**
      * Sets TriggerType to SOFT_ALWAYS and calls Scanner.read().
-     * This method should be used when only using a software button to
-     * trigger the scanner.
+     * This method should be used when a software button is the only trigger for the scanner.
      *
      * @param condig Scanner configuration passed from React Native app.
      */
@@ -474,10 +472,10 @@ public class BarcodeScannerThread extends Thread implements EMDKListener, DataLi
 
     /**
      * Enables the scanner hardware.
-     * This method does not make the scanner to scan or turn on
-     * the laser. If the same scanner is enabled by other
-     * applications, this will throws ScannerExceptions. You must
-     * call disable() when you are done the scanning, otherwise it
+     * This method does not make the scanner scan or turn on its laser. 
+     * If the same scanner is enabled by other
+     * applications, this will throw ScannerExceptions. You must
+     * call disable() when you are done scanning, otherwise it
      * will remain locked and be unavailable to other applications.
      * Source: http://techdocs.zebra.com/emdk-for-android/5-0/api/barcode/Scanner/
      */
