@@ -9,3 +9,5 @@ android/gradle/
 build/
 *.iml
 android/gradlew
+*.zip
+android/src/main/gen/
