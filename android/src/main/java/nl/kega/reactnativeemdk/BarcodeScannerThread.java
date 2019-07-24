@@ -179,7 +179,7 @@ public class BarcodeScannerThread extends Thread implements EMDKListener, DataLi
             for (ScanData data : scanData) {
                 String dataString = data.getData();
                 Log.v(TAG, "onData: " + dataString);
-                FL.e("Thread received data.")
+                FL.e("Thread received data.");
                 this.dispatchEvent("BarcodeEvent", dataString);
                 barcodes.pushString(dataString);
             }
