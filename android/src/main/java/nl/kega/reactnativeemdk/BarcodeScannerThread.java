@@ -527,6 +527,7 @@ public class BarcodeScannerThread extends Thread implements EMDKListener, DataLi
      * Source: http://techdocs.zebra.com/emdk-for-android/5-0/api/barcode/Scanner/
      */
     public void disable() {
+        FL.e(""+ this.scanner);
         try {
             if (this.scanner != null) {
                 this.scanner.disable();
