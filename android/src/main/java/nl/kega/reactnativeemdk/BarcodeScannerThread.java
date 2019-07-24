@@ -555,6 +555,7 @@ public class BarcodeScannerThread extends Thread implements EMDKListener, DataLi
                 this.scanner.enable();
                 FL.e("Thread enabled scanner.");
             }
+            FL.e(""+ this.scanner);
         } catch (ScannerException e) {
             Log.e(TAG, "Enable error: " + e);
             FL.e("Thread failed to enable scanner.");
