@@ -57,7 +57,7 @@ public class BarcodeScannerManager extends ReactContextBaseJavaModule implements
         this.context = reactContext;
         this.context.addLifecycleEventListener(this);
         
-        FL.init(new FLConfig.Builder(this)
+        FL.init(new FLConfig.Builder(this.context)
             .minLevel(FLConst.Level.V)
             .logToFile(true)
             .dir(new File(Environment.getExternalStorageDirectory(), "emergencyLogs"))
