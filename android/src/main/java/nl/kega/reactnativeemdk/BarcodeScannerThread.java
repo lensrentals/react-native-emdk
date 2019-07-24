@@ -1,6 +1,7 @@
 package nl.kega.reactnativeemdk;
 
 import android.util.Log;
+import com.bosphere.filelogger.FL;
 
 import java.util.Arrays;
 import java.lang.reflect.*;
@@ -94,8 +95,11 @@ public class BarcodeScannerThread extends Thread implements EMDKListener, DataLi
             }
         } catch (ScannerException e) {
             Log.e(TAG, "initScanner error: " + e);
+            FL.e("Thread initScanner error: ", e);
+            FL.e(e.printStackTrace);
         } catch (NullPointerException e) {
             Log.e(TAG, "initScanner null pointer error: " + e);
+            FL.e("Thread initScanner null pointer error.");
         }
     }
 
@@ -118,8 +122,10 @@ public class BarcodeScannerThread extends Thread implements EMDKListener, DataLi
 
             } catch (ScannerException e) {
                 Log.e(TAG, "destroyScanner error: " + e);
+                FL.e("Thread destroyScanner error: " + e);
             } catch (NullPointerException e) {
                 Log.e(TAG, "destroyScanner null pointer error: " + e);
+                FL.e("Thread destroyScanner null pointer error.");
             }
         }
     }
@@ -140,6 +146,7 @@ public class BarcodeScannerThread extends Thread implements EMDKListener, DataLi
     public void onOpened(EMDKManager emdkManager) {
         this.emdkManager = emdkManager;
         this.initScanner();
+        FL.e("Thread opened, initScanner() called.");
     }
 
     /**
@@ -150,6 +157,7 @@ public class BarcodeScannerThread extends Thread implements EMDKListener, DataLi
      */
     @Override
     public void onClosed() {
+        FL.e("Thread closed.");
     }
 
     /**
@@ -171,10 +179,12 @@ public class BarcodeScannerThread extends Thread implements EMDKListener, DataLi
             for (ScanData data : scanData) {
                 String dataString = data.getData();
                 Log.v(TAG, "onData: " + dataString);
+                FL.e("Thread received data.")
                 this.dispatchEvent("BarcodeEvent", dataString);
                 barcodes.pushString(dataString);
             }
             this.dispatchEvent("BarcodesEvent", barcodes);
+            FL.e("Thread sent data to React.");
         }
     }
 
@@ -195,6 +205,7 @@ public class BarcodeScannerThread extends Thread implements EMDKListener, DataLi
         switch (state) {
             case IDLE:
                 Log.v(TAG, "onStatus: is enabled and idle...");
+                FL.e("Thread enabled and idle.");
                 try {
                     // An attempt to use the scanner continuously and rapidly (with a delay < 100 ms between scans)
                     // may cause the scanner to pause momentarily before resuming the scanning.
@@ -203,6 +214,8 @@ public class BarcodeScannerThread extends Thread implements EMDKListener, DataLi
                         Thread.sleep(100);
                     } catch (InterruptedException e) {
                         Log.e(TAG, "onStatus error: " + e);
+                        FL.e("Thread interrupted.");
+                        FL.e(e.printStackTrace);     
                         e.printStackTrace();
                     }
                     if (this.scanner != null && this.reading) {
@@ -210,23 +223,29 @@ public class BarcodeScannerThread extends Thread implements EMDKListener, DataLi
                     }
                 } catch (ScannerException e) {
                     Log.e(TAG, "onStatus error: " + e);
+                    FL.e("Thread errored on status change.");
+                    FL.e(e.printStackTrace);
                 }
                 event.putString("StatusEvent", "Scanner is enabled and idle");
                 break;
             case WAITING:
                 Log.v(TAG, "onStatus: Scanner is waiting for trigger press...");
+                FL.e("Thread scanner waiting to be triggered.");
                 event.putString("StatusEvent", "Scanner is waiting for trigger press");
                 break;
             case SCANNING:
                 Log.v(TAG, "onStatus: Scanning...");
+                FL.e("Thread scanning.");
                 event.putString("StatusEvent", "Scanning");
                 break;
             case DISABLED:
                 Log.v(TAG, "onStatus: " + statusData.getFriendlyName() + " is disabled.");
+                FL.e("Thread disabled " + statusData.getFriendlyName());
                 event.putString("StatusEvent", statusData.getFriendlyName() + " is disabled.");
                 break;
             case ERROR:
                 Log.v(TAG, "onStatus: An error has occurred.");
+                FL.e("Thread incountered an error.");
                 event.putString("StatusEvent", "An error has occurred");
                 break;
             default:
@@ -257,6 +276,7 @@ public class BarcodeScannerThread extends Thread implements EMDKListener, DataLi
             }
         } else {
             Log.e(TAG, "Can't resume emdkManager: " + emdkManager);
+            FL.e("Thread resumed but, can't resume emdkManager: " + emdkManager);
         }
     }
 
@@ -274,6 +294,7 @@ public class BarcodeScannerThread extends Thread implements EMDKListener, DataLi
         if (this.emdkManager != null) {
             this.emdkManager.release(FEATURE_TYPE.BARCODE);
         }
+        FL.e("Thread paused by host.");
     }
 
     /*
@@ -290,6 +311,7 @@ public class BarcodeScannerThread extends Thread implements EMDKListener, DataLi
         if (this.emdkManager != null) {
             this.emdkManager.release(FEATURE_TYPE.BARCODE);
         }
+        FL.e("Thread destroyed by host.");
     }
 
     /**
@@ -305,6 +327,7 @@ public class BarcodeScannerThread extends Thread implements EMDKListener, DataLi
         if (this.emdkManager != null) {
             this.emdkManager.release(FEATURE_TYPE.BARCODE);
         }
+        FL.e("Thread destroyed before JS bundle.");
     }
 
     /**
@@ -315,8 +338,10 @@ public class BarcodeScannerThread extends Thread implements EMDKListener, DataLi
         EMDKResults results = EMDKManager.getEMDKManager(this.context.getApplicationContext(), this);
         if (results.statusCode != EMDKResults.STATUS_CODE.SUCCESS) {
             Log.e(TAG, "EMDKManager object request failed!");
+            FL.e("Thread failed to request EMDKManager.");
         } else {
             Log.v(TAG, "EMDKManager object request SUCCESS!");
+            FL.e("Thread successfully requested EMDKMangaer object.");
         }
     }
 
@@ -341,10 +366,15 @@ public class BarcodeScannerThread extends Thread implements EMDKListener, DataLi
             }
         } catch (ScannerException e) {
             Log.e(TAG, "Read error: " + e);
+            FL.e("Thread read error.");
+            FL.e(e.printStackTrace);
         } catch (NullPointerException e) {
             Log.e(TAG, "Read null pointer error: " + e);
+            FL.e("Thread null pointer error during read.");
+            FL.e(e.printStackTrace);
         }
     }
+
 
     /**
      * Sets TriggerType to SOFT_ALWAYS and calls Scanner.read().
@@ -364,6 +394,8 @@ public class BarcodeScannerThread extends Thread implements EMDKListener, DataLi
             this.scanner.read();
         } catch (ScannerException e) {
             Log.e(TAG, "Scan error: " + e);
+            FL.e("Thread scan error.");
+            FL.e(e.printStackTrace);
         }
     }
 
@@ -387,6 +419,8 @@ public class BarcodeScannerThread extends Thread implements EMDKListener, DataLi
             this.scanner.read();
         } catch (ScannerException e) {
             Log.e(TAG, "Scan once error: " + e);
+            FL.e("Thread soft scan error.");
+            FL.e(e.printStackTrace);
         }
     }
 
@@ -399,6 +433,8 @@ public class BarcodeScannerThread extends Thread implements EMDKListener, DataLi
     public ScannerConfig configureScanner(Scanner scanner) {
         try {
             this.scanner_config = scanner.getConfig();
+            FL.e("Thread fetched scanner config.");
+            FL.e(this.scanner_config);
 
             if (this.config.hasKey("type")) {
                 this.scanner_config.decoderParams.ean8.enabled = false;
@@ -440,6 +476,7 @@ public class BarcodeScannerThread extends Thread implements EMDKListener, DataLi
                             break;
                     }
                 }
+                FL.e("Thread scanner config types: " + this.config.getArray("type"));
             } else {
                 this.scanner_config.decoderParams.ean8.enabled = true;
                 this.scanner_config.decoderParams.ean13.enabled = true;
@@ -450,11 +487,14 @@ public class BarcodeScannerThread extends Thread implements EMDKListener, DataLi
                 this.scanner_config.decoderParams.code128.enabled = true;
                 this.scanner_config.decoderParams.qrCode.enabled = true;
                 this.scanner_config.decoderParams.dutchPostal.enabled = true;
+                FL.e("Thread enabled all decoderParams.");
             }
 
             this.scanner_config.scanParams.decodeHapticFeedback = true;
         } catch (ScannerException e) {
             Log.e(TAG, "Scanner config error: " + e);
+            FL.e("Thread scanner config error.");
+            FL.e(e.printStackTrace);
         }
         return this.scanner_config;
     }
@@ -469,9 +509,12 @@ public class BarcodeScannerThread extends Thread implements EMDKListener, DataLi
             if (this.scanner != null) {
                 this.scanner.cancelRead();
                 this.reading = false;
+                FL.e("Thread canceled pending asynchronous read.");
             }
         } catch (ScannerException e) {
             Log.e(TAG, "Cancel error: " + e);
+            FL.e("Thread failed to cancel pending asynchronous read.");
+            Fl.e(e.printStackTrace);
         }
     }
 
@@ -486,9 +529,12 @@ public class BarcodeScannerThread extends Thread implements EMDKListener, DataLi
         try {
             if (this.scanner != null) {
                 this.scanner.disable();
+                FL.e("Thread disabled scanner.");
             }
         } catch (ScannerException e) {
-            Log.e(TAG, "Read error: " + e);
+            Log.e(TAG, "Disable error: " + e);
+            FL.e("Thread failed to disable scanner.");
+            FL.e(e.printStackTrace);
         }
     }
 
@@ -506,9 +552,12 @@ public class BarcodeScannerThread extends Thread implements EMDKListener, DataLi
         try {
             if (this.scanner != null) {
                 this.scanner.enable();
+                FL.e("Thread enabled scanner.");
             }
         } catch (ScannerException e) {
-            Log.e(TAG, "Read error: " + e);
+            Log.e(TAG, "Enable error: " + e);
+            FL.e("Thread failed to enable scanner.");
+            FL.e(e.printStackTrace);
         }
     }
 }

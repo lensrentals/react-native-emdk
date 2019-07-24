@@ -3,6 +3,7 @@ package nl.kega.reactnativeemdk;
 import android.util.Log;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.Environment;
 
 import java.util.Arrays;
 import java.lang.reflect.*;
@@ -27,6 +28,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import java.io.File;
+import com.bosphere.filelogger.FL;
+import com.bosphere.filelogger.FLConfig;
+import com.bosphere.filelogger.FLConst;
+
 /*
  * This class exposes the following methods to the React Native application:
  *  - init()
@@ -50,6 +56,15 @@ public class BarcodeScannerManager extends ReactContextBaseJavaModule implements
         super(reactContext);
         this.context = reactContext;
         this.context.addLifecycleEventListener(this);
+        
+        FL.init(new FLConfig.Builder(this)
+            .minLevel(FLConst.Level.V)
+            .logToFile(true)
+            .dir(new File(Environment.getExternalStorageDirectory(), "emergencyLogs"))
+            .retentionPolicy(FLConst.RetentionPolicy.FILE_COUNT)
+            .build());
+        FL.setEnabled(true);
+
         if (android.os.Build.MANUFACTURER.contains("Zebra Technologies") || android.os.Build.MANUFACTURER.contains("Motorola Solutions")) {
             this.scannerthread = new BarcodeScannerThread(this.context) {
 
