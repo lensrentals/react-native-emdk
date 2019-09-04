@@ -394,7 +394,7 @@ public class BarcodeScannerThread extends Thread implements EMDKListener, DataLi
             }
 
             this.scanner.triggerType = TriggerType.SOFT_ONCE;
-            Log.e("LR-mobile:", "FML+++++++++++++++++c")
+            Log.e("LR-mobile:", "FML+++++++++++++++++c");
             this.scanner.setConfig(configureScanner(scanner));
             this.scanner.read();
         } catch (ScannerException e) {
