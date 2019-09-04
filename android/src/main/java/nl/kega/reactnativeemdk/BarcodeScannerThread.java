@@ -107,6 +107,7 @@ public class BarcodeScannerThread extends Thread implements EMDKListener, DataLi
      * Gracefully destroys the scanner object and releases it so it is available to other apps.
      */
     private void destroyScanner() {
+        FL.e(""+ this.scanner);
         if (this.scanner != null) {
             try {
                 this.scanner.cancelRead();
@@ -363,6 +364,7 @@ public class BarcodeScannerThread extends Thread implements EMDKListener, DataLi
 
                 this.scanner.triggerType = TriggerType.HARD;
                 this.scanner.setConfig(configureScanner(scanner));
+                FL.e("Thread set scanner config.");
                 this.scanner.read();
             }
         } catch (ScannerException e) {
@@ -527,7 +529,6 @@ public class BarcodeScannerThread extends Thread implements EMDKListener, DataLi
      * Source: http://techdocs.zebra.com/emdk-for-android/5-0/api/barcode/Scanner/
      */
     public void disable() {
-        FL.e(""+ this.scanner);
         try {
             if (this.scanner != null) {
                 this.scanner.disable();
