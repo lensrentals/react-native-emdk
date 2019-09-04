@@ -386,13 +386,15 @@ public class BarcodeScannerThread extends Thread implements EMDKListener, DataLi
      * @param condig Scanner configuration passed from React Native app.
      */
     public void scan(ReadableMap condig) {
+        Log.d(TAG,"+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
         try {
             this.config = condig;
             if (this.scanner.isReadPending()) {
                 this.scanner.cancelRead();
             }
 
-            this.scanner.triggerType = TriggerType.SOFT_ALWAYS;
+            this.scanner.triggerType = TriggerType.SOFT_ONCE;
+            Log.e("LR-mobile:", "FML+++++++++++++++++c")
             this.scanner.setConfig(configureScanner(scanner));
             this.scanner.read();
         } catch (ScannerException e) {
